@@ -23,7 +23,7 @@ import com.agileengine.leadandroidtesttask.todolist.model.ToDoItem;
 
 public interface ToDoListApi {
 
-    CursorLoader getToDoItems();
+    CursorLoader getToDoItems(String sortOder);
 
     void addToDoItem(ToDoItem item);
 

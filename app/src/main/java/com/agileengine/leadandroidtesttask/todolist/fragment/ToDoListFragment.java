@@ -34,6 +34,7 @@ import com.agileengine.leadandroidtesttask.todolist.R;
 import com.agileengine.leadandroidtesttask.todolist.activity.AddEditToDoItemActivity;
 import com.agileengine.leadandroidtesttask.todolist.adapter.ToDoItemAdapter;
 import com.agileengine.leadandroidtesttask.todolist.adapter.base.CursorRecyclerViewAdapter;
+import com.agileengine.leadandroidtesttask.todolist.db.table.ToDoItemTable;
 import com.agileengine.leadandroidtesttask.todolist.framework.callback.OnItemClickListener;
 import com.agileengine.leadandroidtesttask.todolist.framework.fragment.base.RecycleCursorFragment;
 import com.agileengine.leadandroidtesttask.todolist.model.ToDoItem;
@@ -52,7 +53,7 @@ public class ToDoListFragment extends RecycleCursorFragment {
 
     @Override
     protected CursorLoader getCursorLoader() {
-        return App.getToDoApi().getToDoItems();
+        return App.getToDoApi().getToDoItems(ToDoItemTable.Cols.URGENT + " DESC");
     }
 
     @Override
