@@ -28,7 +28,7 @@ public abstract class CursorLoaderFragment extends ContentFragment implements Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return getCursorLoader();
+        return getCursorLoader(id, args);
     }
 
     @Override
@@ -41,7 +41,7 @@ public abstract class CursorLoaderFragment extends ContentFragment implements Lo
 
     }
 
-    protected abstract CursorLoader getCursorLoader();
+    protected abstract CursorLoader getCursorLoader(int id, Bundle args);
 
     protected abstract CursorRecyclerViewAdapter getAdapter();
 }

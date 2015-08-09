@@ -30,8 +30,8 @@ public class ToDoListApiImpl implements ToDoListApi {
     Context context = App.getContext();
 
     @Override
-    public CursorLoader getToDoItems(String sortOder) {
-        return new CursorLoader(context, ToDoItemTable.CONTENT_URI, null, null, null, sortOder);
+    public CursorLoader getToDoItems(String selection, String[] selectionArg, String sortOder) {
+        return new CursorLoader(context, ToDoItemTable.CONTENT_URI, null, selection, selectionArg, sortOder);
     }
 
     @Override

@@ -82,11 +82,16 @@ public abstract class ContentActivity<T extends Fragment> extends AppCompatActiv
 
     @Override
     public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
         T frg = getContentFragment();
         if (!(frg instanceof OnBackButtonListener) || !((OnBackButtonListener) frg).onBackButtonPressed()) {
             super.onBackPressed();
         }
-        return false;
     }
 
     public T getContentFragment() {

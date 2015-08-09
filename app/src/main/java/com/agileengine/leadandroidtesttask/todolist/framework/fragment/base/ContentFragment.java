@@ -132,7 +132,6 @@ public abstract class ContentFragment extends Fragment implements OnBackButtonLi
 
     @Override
     public boolean onBackButtonPressed() {
-        getActivity().finish();
         return false;
     }
 

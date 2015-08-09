@@ -39,7 +39,7 @@ public abstract class RecycleCursorFragment extends CursorLoaderFragment {
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return getCursorLoader();
+        return getCursorLoader(id, args);
     }
 
     @Override
@@ -52,7 +52,7 @@ public abstract class RecycleCursorFragment extends CursorLoaderFragment {
 
     }
 
-    protected abstract CursorLoader getCursorLoader();
+    protected abstract CursorLoader getCursorLoader(int id, Bundle args);
 
     protected abstract CursorRecyclerViewAdapter getAdapter();
 
