@@ -27,4 +27,9 @@ public class ServiceActions {
 
     public static final String ACTION_UPDATE_TODO_ITEM_SUCCESS = ServiceActions.class.getClass().getPackage() + "ACTION_UPDATE_TODO_ITEM_SUCCESS";
     public static final String ACTION_UPDATE_TODO_ITEM_FAILURE = ServiceActions.class.getClass().getPackage() + "ACTION_UPDATE_TODO_ITEM_FAILURE";
+
+    public static final String ACTION_DELETE_TODO_ITEM = ServiceActions.class.getClass().getPackage() + "ACTION_DELETE_TODO_ITEM";
+
+    public static final String ACTION_DELETE_TODO_ITEM_SUCCESS = ServiceActions.class.getClass().getPackage() + "ACTION_DELETE_TODO_ITEM_SUCCESS";
+    public static final String ACTION_DELETE_TODO_ITEM_FAILURE = ServiceActions.class.getClass().getPackage() + "ACTION_DELETE_TODO_ITEM_FAILURE";
 }

@@ -21,12 +21,14 @@ import android.content.Context;
 
 import com.agileengine.leadandroidtesttask.todolist.api.ToDoListApi;
 import com.agileengine.leadandroidtesttask.todolist.api.ToDoListApiImpl;
+import com.agileengine.leadandroidtesttask.todolist.api.ToDoListApiImplSupport;
 
 
 public class App extends Application {
 
     private static Context sContext;
     private static ToDoListApi sToDoApi;
+    private static ToDoListApiImplSupport sToDoApiSupport;
 
     public static Context getContext() {
         return sContext;
@@ -38,9 +40,14 @@ public class App extends Application {
         sContext = getApplicationContext();
 
         sToDoApi = new ToDoListApiImpl();
+        sToDoApiSupport = new ToDoListApiImplSupport();
     }
 
     public static ToDoListApi getToDoApi() {
         return sToDoApi;
+    }
+
+    public static ToDoListApiImplSupport getToDoApiSupport() {
+        return sToDoApiSupport;
     }
 }

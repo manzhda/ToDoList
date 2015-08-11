@@ -22,7 +22,7 @@ import com.agileengine.leadandroidtesttask.todolist.fragment.ToDoListFragment;
 import com.agileengine.leadandroidtesttask.todolist.framework.activity.ContentActivity;
 
 
-public class ToDoListActivity extends ContentActivity<ToDoListFragment>{
+public class ToDoListActivity extends ContentActivity<ToDoListFragment> {
     @Override
     protected ToDoListFragment onCreateContentFragment() {
         return new ToDoListFragment();

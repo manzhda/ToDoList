@@ -25,9 +25,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,9 +43,11 @@ import com.agileengine.leadandroidtesttask.todolist.activity.AddEditToDoItemActi
 import com.agileengine.leadandroidtesttask.todolist.adapter.ToDoItemAdapter;
 import com.agileengine.leadandroidtesttask.todolist.adapter.base.CursorRecyclerViewAdapter;
 import com.agileengine.leadandroidtesttask.todolist.db.table.ToDoItemTable;
-import com.agileengine.leadandroidtesttask.todolist.framework.callback.OnItemClickListener;
 import com.agileengine.leadandroidtesttask.todolist.framework.fragment.base.RecycleCursorFragment;
-import com.agileengine.leadandroidtesttask.todolist.model.ToDoItem;
+import com.agileengine.leadandroidtesttask.todolist.framework.paulburke.helper.OnStartDragListener;
+import com.agileengine.leadandroidtesttask.todolist.framework.paulburke.helper.SimpleItemTouchHelperCallback;
+
+import jp.wasabeef.recyclerview.animators.FlipInLeftYAnimator;
 
 
 public class ToDoListFragment extends RecycleCursorFragment {
@@ -53,6 +58,10 @@ public class ToDoListFragment extends RecycleCursorFragment {
     private static final int REQUEST_CODE = 1000;
     private SearchView mSearchView;
     private String mQuery;
+    private ItemTouchHelper mItemTouchHelper;
+
+    private ActionModeCallback actionModeCallback = new ActionModeCallback();
+    private ActionMode actionMode;
 
     @Override
     protected int getTargetLayout() {
@@ -81,18 +90,59 @@ public class ToDoListFragment extends RecycleCursorFragment {
 
     @Override
     protected void initComponents(LayoutInflater inflater, View root, Bundle savedInstanceState) {
-        mToDoItemAdapter = new ToDoItemAdapter(getActivity(), null);
-
-        mToDoItemAdapter.setToDoItemClickListener(new OnItemClickListener<ToDoItem>() {
+        mToDoItemAdapter = new ToDoItemAdapter(getActivity(), new ToDoItemAdapter.ViewHolder.ClickListener() {
             @Override
-            public void onItemClicked(View view, ToDoItem item, int position) {
-                AddEditToDoItemActivity.goThereForResult(getActivity(), item, REQUEST_CODE);
+            public void onItemClicked(int position) {
+                if (actionMode != null) {
+                    toggleSelection(position);
+                } else {
+                    AddEditToDoItemActivity.goThereForResult(getActivity(), mToDoItemAdapter.getItem(position), REQUEST_CODE);
+                }
+            }
+
+            @Override
+            public boolean onItemLongClicked(int position) {
+//                if (actionMode == null) {
+//                    actionMode = getActivity().startActionMode(actionModeCallback);
+//                    getToolbar().setVisibility(View.GONE);
+//                }
+//
+//                toggleSelection(position);
+//
+                return true;
+            }
+        }, null);
+
+        mToDoItemAdapter.setOnStartDragListener(new OnStartDragListener() {
+            @Override
+            public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+                if(actionMode != null){
+                    actionMode.finish();
+                }
+                mItemTouchHelper.startDrag(viewHolder);
+            }
+
+            @Override
+            public void onLongPress(int position) {
+                if (actionMode == null) {
+                    actionMode = getActivity().startActionMode(actionModeCallback);
+                    getToolbar().setVisibility(View.GONE);
+                }
+
+                toggleSelection(position);
+
             }
         });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
+//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setItemAnimator(new FlipInLeftYAnimator());
         mRecyclerView.setAdapter(mToDoItemAdapter);
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mToDoItemAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
 
         FloatingActionButton createNew = (FloatingActionButton)  root.findViewById(R.id.fb_create_new_todo_item);
@@ -187,4 +237,62 @@ public class ToDoListFragment extends RecycleCursorFragment {
     private void createNewToDoItem() {
         AddEditToDoItemActivity.goThereForResult(getActivity(), null, REQUEST_CODE);
     }
+
+    /**
+     * Toggle the selection state of an item.
+     *
+     * If the item was the last one in the selection and is unselected, the selection is stopped.
+     * Note that the selection must already be started (actionMode must not be null).
+     *
+     * @param position Position of the item to toggle the selection state
+     */
+    private void toggleSelection(int position) {
+        mToDoItemAdapter.toggleSelection(position);
+        int count = mToDoItemAdapter.getSelectedItemCount();
+
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count));
+            actionMode.invalidate();
+        }
+    }
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @SuppressWarnings("unused")
+        private final String TAG = ActionModeCallback.class.getSimpleName();
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate (R.menu.menu_todo_context, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_remove:
+                    // TODO: actually remove items
+                    Log.d(TAG, "menu_remove");
+                    mode.finish();
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mToDoItemAdapter.clearSelection();
+            getToolbar().setVisibility(View.VISIBLE);
+            actionMode = null;
+        }
+    }
+
 }

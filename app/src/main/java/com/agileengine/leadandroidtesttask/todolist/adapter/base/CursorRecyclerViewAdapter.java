@@ -22,10 +22,11 @@ import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 
+import com.agileengine.leadandroidtesttask.todolist.framework.adapter.SelectableAdapter;
 import com.agileengine.leadandroidtesttask.todolist.framework.callback.ItemGetter;
 
 
-public abstract class CursorRecyclerViewAdapter<H extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<H> implements ItemGetter {
+public abstract class CursorRecyclerViewAdapter<H extends RecyclerView.ViewHolder> extends SelectableAdapter<H> implements ItemGetter {
 
     protected LayoutInflater inflater;
 

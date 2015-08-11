@@ -19,6 +19,7 @@ package com.agileengine.leadandroidtesttask.todolist.cache.service;
 import android.content.Context;
 
 import com.agileengine.leadandroidtesttask.todolist.cache.service.commands.AddToDoItemCommand;
+import com.agileengine.leadandroidtesttask.todolist.cache.service.commands.DeleteToDoItemCommand;
 import com.agileengine.leadandroidtesttask.todolist.cache.service.commands.UpdateToDoItemCommand;
 import com.tac.cache.command.ServiceCommand;
 import com.tac.cache.service.CommandHelper;
@@ -34,6 +35,7 @@ public class ToDoListCommandHelper implements CommandHelper {
             {
                 put(ServiceActions.ACTION_CREATE_TODO_ITEM, new AddToDoItemCommand(context));
                 put(ServiceActions.ACTION_UPDATE_TODO_ITEM, new UpdateToDoItemCommand(context));
+                put(ServiceActions.ACTION_DELETE_TODO_ITEM, new DeleteToDoItemCommand(context));
             }
         };
     }
