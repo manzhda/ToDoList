@@ -70,7 +70,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 .append(ToDoItemTable.Cols.URGENT).append(" TEXT, ")
                 .append(ToDoItemTable.Cols.DUE_DATE).append(" TEXT, ")
                 .append(ToDoItemTable.Cols.TAGS).append(" TEXT, ")
-                .append(ToDoItemTable.Cols.DONE).append(" TEXT");
+                .append(ToDoItemTable.Cols.DONE).append(" TEXT, ")
+                .append(ToDoItemTable.Cols.ORDER).append(" TEXT");
 
         createTable(db, ToDoItemTable.TABLE_NAME, todoTable.toString());
     }

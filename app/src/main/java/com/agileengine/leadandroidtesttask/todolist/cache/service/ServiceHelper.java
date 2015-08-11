@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.agileengine.leadandroidtesttask.todolist.cache.service.commands.AddToDoItemCommand;
+import com.agileengine.leadandroidtesttask.todolist.cache.service.commands.DeleteToDoItemCommand;
 import com.agileengine.leadandroidtesttask.todolist.cache.service.commands.UpdateToDoItemCommand;
 import com.agileengine.leadandroidtesttask.todolist.model.ToDoItem;
 import com.agileengine.leadandroidtesttask.todolist.utils.SyncUtils;
@@ -39,9 +40,21 @@ public class ServiceHelper {
     }
 
     public static void updateToDoItem(Context context, ToDoItem item) {
+        updateToDoItem(context, item, true);
+    }
+
+    public static void updateToDoItem(Context context, ToDoItem item, boolean notify) {
         Intent intent = new Intent(context, ToDoService.class);
         intent.setAction(ServiceActions.ACTION_UPDATE_TODO_ITEM);
         intent.putExtra(UpdateToDoItemCommand.BUNDLE_UPDATE_TODO_ITEM, item);
+        intent.putExtra(UpdateToDoItemCommand.BUNDLE_UPDATE_TODO_ITEM_NOTIFY, notify);
+        context.startService(intent);
+    }
+
+    public static void deleteToDoItem(Context context, ToDoItem item) {
+        Intent intent = new Intent(context, ToDoService.class);
+        intent.setAction(ServiceActions.ACTION_DELETE_TODO_ITEM);
+        intent.putExtra(DeleteToDoItemCommand.BUNDLE_DELETE_TODO_ITEM, item);
         context.startService(intent);
     }
 }

@@ -12,6 +12,7 @@ import android.os.IBinder;
 public class AuthenticatorService extends Service {
 
     public static final String ACCOUNT_NAME = "sync";
+    private static final String ACCOUNT_TYPE = "com.agileengine.leadandroidtesttask.todolist";
 
     // Instance field that stores the authenticator object
     private Authenticator mAuthenticator;
@@ -25,12 +26,8 @@ public class AuthenticatorService extends Service {
      * return stub's account for SyncAdapter
      */
     public static Account getAccount() {
-        return new Account(ACCOUNT_NAME, getAccountType());
+        return new Account(ACCOUNT_NAME, ACCOUNT_TYPE);
     }
-
-    protected static String getAccountType(){
-        return "";
-    };
 
     @Override
     public IBinder onBind(Intent intent) {

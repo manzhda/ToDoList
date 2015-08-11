@@ -3,16 +3,33 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".ToDoList">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="101"
-        android:title="@string/action_settings"
-        app:showAsAction="never"
-        />
-    <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_magnify_black_48dp"
         android:orderInCategory="0"
         android:title="@string/action_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
+
+    <item android:id="@+id/menu_sort"
+          android:icon="@drawable/ic_sort_variant_black_48dp"
+          android:title="@string/todo_sort"
+          app:showAsAction="always">
+        <menu>
+            <group android:checkableBehavior="single">
+            <item android:id="@+id/submenu_priority_sort"
+                  android:title="@string/todo_sort_by_priority"
+                />
+            <item android:id="@+id/submenu_custom_sort"
+                  android:title="@string/todo_sort_by_custom"
+                />
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_remove"
+        android:orderInCategory="101"
+        android:title="@string/todo_delete_title"
+        app:showAsAction="never"
+        />
 </menu>

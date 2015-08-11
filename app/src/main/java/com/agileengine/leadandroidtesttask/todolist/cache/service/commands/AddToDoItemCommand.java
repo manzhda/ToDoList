@@ -17,6 +17,7 @@
 package com.agileengine.leadandroidtesttask.todolist.cache.service.commands;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.agileengine.leadandroidtesttask.todolist.App;
@@ -36,7 +37,14 @@ public class AddToDoItemCommand extends ServiceCommand {
     protected Bundle perform(Bundle extras) throws Exception {
 
         ToDoItem item = extras.getParcelable(BUNDLE_CREATE_TODO_ITEM);
-        App.getToDoApi().addToDoItem(item);
+        Uri uri = App.getToDoApi().addToDoItem(item);
+
+        String lastPathSegment = uri.getLastPathSegment();
+
+        item.setOrder(lastPathSegment);
+        item.setId(Long.parseLong(lastPathSegment));
+
+        App.getToDoApi().updateToDoItem(item);
 
         return null;
     }

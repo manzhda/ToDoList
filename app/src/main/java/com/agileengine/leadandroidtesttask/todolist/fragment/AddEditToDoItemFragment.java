@@ -143,12 +143,12 @@ public class AddEditToDoItemFragment extends ContentFragment implements
 
     @OnClick(R.id.txt_due_date)
     public void onDueDateClick(View view){
-        Calendar now = Calendar.getInstance();
+        Calendar calendar = getCalendar(mToDoItem.getDueDate());
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 this,
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
         );
 
         dpd.show(getFragmentManager(), "Datepickerdialog");
@@ -156,11 +156,11 @@ public class AddEditToDoItemFragment extends ContentFragment implements
 
     @OnClick(R.id.txt_due_time)
     public void onDueTimeClick(View view){
-        Calendar now = Calendar.getInstance();
+        Calendar calendar = getCalendar(mToDoItem.getDueDate());
         TimePickerDialog tpd = TimePickerDialog.newInstance(
                 this,
-                now.get(Calendar.HOUR_OF_DAY),
-                now.get(Calendar.MINUTE), true
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE), true
         );
         tpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
@@ -175,17 +175,31 @@ public class AddEditToDoItemFragment extends ContentFragment implements
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
         onUpdateTime(hourOfDay, minute);
+
+        Calendar calendar = getCalendar(mToDoItem.getDueDate());
+
+        calendar.set(Calendar.HOUR, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+
+        mToDoItem.setDueDate(calendar.getTime());
     }
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         onUpdateDate(year, monthOfYear, dayOfMonth);
+
+        Calendar calendar = getCalendar(mToDoItem.getDueDate());
+
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        mToDoItem.setDueDate(calendar.getTime());
     }
 
     private void onSetDateTime(Date date) {
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(date.getTime());
+        Calendar calendar = getCalendar(date);
 
         onUpdateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         onUpdateTime(calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE));
@@ -194,6 +208,13 @@ public class AddEditToDoItemFragment extends ContentFragment implements
     private void onUpdateDate(int year, int monthOfYear, int dayOfMonth) {
         String date =  dayOfMonth+"/"+(++monthOfYear)+"/"+year;
         mDueDate.setText(date);
+    }
+
+    @NonNull
+    private Calendar getCalendar(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date.getTime());
+        return calendar;
     }
 
     private void onUpdateTime(int hourOfDay, int minute) {
@@ -220,7 +241,7 @@ public class AddEditToDoItemFragment extends ContentFragment implements
         mToDoItem.setDescription(getValue(mDescription));
         mToDoItem.setTags(getValue(mTags));
 
-        if(mToDoItem.getId() == null){
+        if(mToDoItem.getId() == -1){
             ServiceHelper.createToDoItem(getActivity(), mToDoItem);
         } else {
             ServiceHelper.updateToDoItem(getActivity(), mToDoItem);

@@ -18,6 +18,7 @@ package com.agileengine.leadandroidtesttask.todolist.api;
 
 
 import android.content.CursorLoader;
+import android.net.Uri;
 
 import com.agileengine.leadandroidtesttask.todolist.model.ToDoItem;
 
@@ -25,9 +26,10 @@ public interface ToDoListApi {
 
     CursorLoader getToDoItems(String selection, String[] selectionArg, String sortOder);
 
-    void addToDoItem(ToDoItem item);
+    Uri addToDoItem(ToDoItem item);
 
     void updateToDoItem(ToDoItem itemId);
+    void updateToDoItem(ToDoItem itemId, boolean notify);
 
     void deleteToDoItem(ToDoItem itemId);
 

@@ -27,33 +27,35 @@ import java.util.Date;
 
 public class ToDoItem implements Parcelable {
 
-    private String id;
+    private long id = -1;
     private String title;
     private String description;
     private boolean urgent;
     private Date dueDate;
     private String tags;
     private boolean done;
+    private String order;
 
     public ToDoItem() {
 
     }
 
     public ToDoItem(Cursor cursor) {
-        id = cursor.getString(cursor.getColumnIndex(ToDoItemTable.Cols.ID));
+        id = cursor.getLong(cursor.getColumnIndex(ToDoItemTable.Cols.ID));
         title = cursor.getString(cursor.getColumnIndex(ToDoItemTable.Cols.TITLE));
         description = cursor.getString(cursor.getColumnIndex(ToDoItemTable.Cols.DESCRIPTION));
         urgent = cursor.getInt(cursor.getColumnIndex(ToDoItemTable.Cols.URGENT)) != 0;
         tags = cursor.getString(cursor.getColumnIndex(ToDoItemTable.Cols.TAGS));
         dueDate = new Date(cursor.getLong(cursor.getColumnIndex(ToDoItemTable.Cols.DUE_DATE)));
         done = cursor.getInt(cursor.getColumnIndex(ToDoItemTable.Cols.DONE)) != 0;
+        order = cursor.getString(cursor.getColumnIndex(ToDoItemTable.Cols.ORDER));
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -105,6 +107,19 @@ public class ToDoItem implements Parcelable {
         this.done = done;
     }
 
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return "ToDoItem: [ title = " + title + ", order = " + order + " ]";
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -112,17 +127,18 @@ public class ToDoItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.id);
+        dest.writeLong(this.id);
         dest.writeString(this.title);
         dest.writeString(this.description);
         dest.writeByte(urgent ? (byte) 1 : (byte) 0);
         dest.writeLong(dueDate != null ? dueDate.getTime() : -1);
         dest.writeString(this.tags);
         dest.writeByte(done ? (byte) 1 : (byte) 0);
+        dest.writeString(order);
     }
 
     protected ToDoItem(Parcel in) {
-        this.id = in.readString();
+        this.id = in.readLong();
         this.title = in.readString();
         this.description = in.readString();
         this.urgent = in.readByte() != 0;
@@ -130,6 +146,7 @@ public class ToDoItem implements Parcelable {
         this.dueDate = tmpDueDate == -1 ? null : new Date(tmpDueDate);
         this.tags = in.readString();
         this.done = in.readByte() != 0;
+        this.order = in.readString();
     }
 
     public static final Parcelable.Creator<ToDoItem> CREATOR = new Parcelable.Creator<ToDoItem>() {

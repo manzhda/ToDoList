@@ -27,6 +27,7 @@ import com.tac.cache.command.ServiceCommand;
 public class UpdateToDoItemCommand extends ServiceCommand {
 
     public static final String BUNDLE_UPDATE_TODO_ITEM = "update_todo_item";
+    public static final String BUNDLE_UPDATE_TODO_ITEM_NOTIFY = "update_todo_item_notify";
 
     public UpdateToDoItemCommand(Context context) {
         super(context, ServiceActions.ACTION_UPDATE_TODO_ITEM_SUCCESS, ServiceActions.ACTION_UPDATE_TODO_ITEM_FAILURE);
@@ -36,7 +37,8 @@ public class UpdateToDoItemCommand extends ServiceCommand {
     protected Bundle perform(Bundle extras) throws Exception {
 
         ToDoItem item = extras.getParcelable(BUNDLE_UPDATE_TODO_ITEM);
-        App.getToDoApi().updateToDoItem(item);
+        boolean notify = extras.getBoolean(BUNDLE_UPDATE_TODO_ITEM_NOTIFY);
+        App.getToDoApi().updateToDoItem(item, notify);
 
         return null;
     }

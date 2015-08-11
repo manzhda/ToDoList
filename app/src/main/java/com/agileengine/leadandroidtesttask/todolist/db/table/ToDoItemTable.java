@@ -53,6 +53,7 @@ public class ToDoItemTable extends BaseTable {
         public static final String DUE_DATE = "due_date";
         public static final String TAGS = "tags";
         public static final String DONE = "done";
+        public static final String ORDER = "custom_order";
     }
 
 }

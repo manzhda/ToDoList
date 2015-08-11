@@ -19,7 +19,7 @@ public class SyncUtils {
 
     private static final String PREF_SETUP_COMPLETE = "setup_complete";
 
-    public static void CreateSyncAccount(Context context) {
+    public static void createSyncAccount(Context context) {
         boolean newAccount = false;
         boolean setupComplete = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREF_SETUP_COMPLETE, false);
 
@@ -48,9 +48,7 @@ public class SyncUtils {
         // Disable sync backoff and ignore sync preferences. In other words...perform sync NOW!
         b.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
         b.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-        ContentResolver.requestSync(
-                AuthenticatorService.getAccount(),
-                ContentDescriptor.AUTHORITY,
-                b);
+
+        ContentResolver.requestSync(AuthenticatorService.getAccount(), ContentDescriptor.AUTHORITY, b);
     }
 }

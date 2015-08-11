@@ -19,6 +19,7 @@ package com.agileengine.leadandroidtesttask.todolist.api;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.net.Uri;
 
 import com.agileengine.leadandroidtesttask.todolist.App;
 import com.agileengine.leadandroidtesttask.todolist.db.table.ToDoItemTable;
@@ -35,15 +36,22 @@ public class ToDoListApiImpl implements ToDoListApi {
     }
 
     @Override
-    public void addToDoItem(ToDoItem item) {
-        context.getContentResolver().insert(ToDoItemTable.CONTENT_URI, getToDoItemValues(item));
+    public Uri addToDoItem(ToDoItem item) {
+        return context.getContentResolver().insert(ToDoItemTable.CONTENT_URI, getToDoItemValues(item));
     }
 
     @Override
-    public void updateToDoItem(ToDoItem item) {
+    public void updateToDoItem(ToDoItem itemId) {
+        updateToDoItem(itemId, true);
+    }
+
+    @Override
+    public void updateToDoItem(ToDoItem item, boolean notify) {
         context.getContentResolver().update(ToDoItemTable.CONTENT_URI, getToDoItemValues(item),
                 ToDoItemTable.Cols.ID + "=" + item.getId(), null);
-
+        if(notify){
+            context.getContentResolver().notifyChange(ToDoItemTable.CONTENT_URI, null);
+        }
     }
 
     @Override
@@ -59,6 +67,7 @@ public class ToDoListApiImpl implements ToDoListApi {
         contentValues.put(ToDoItemTable.Cols.DUE_DATE, item.getDueDate().getTime());
         contentValues.put(ToDoItemTable.Cols.TAGS, item.getTags());
         contentValues.put(ToDoItemTable.Cols.DONE, item.isDone());
+        contentValues.put(ToDoItemTable.Cols.ORDER, item.getOrder());
         return contentValues;
     }
 }
