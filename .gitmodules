@@ -1,3 +1,0 @@
-[submodule "dependencies/tac-engine"]
-	path = dependencies/tac-engine
-	url = git@tacteam.no-ip.org:android/tac-engine.git
